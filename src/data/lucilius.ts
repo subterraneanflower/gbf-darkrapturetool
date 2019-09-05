@@ -3,7 +3,7 @@ import { GbfEnemyAttack, GbfEnemy, GbfRaid, GbfRaidPhase } from './gbf_enemy_dat
 const truePower: GbfEnemyAttack = {
   id: 'truepower',
   name: '真の力解放',
-  description: '弱体効果を全消去'
+  description: ''
 };
 
 const ctMax: GbfEnemyAttack = {
@@ -12,7 +12,7 @@ const ctMax: GbfEnemyAttack = {
   description: 'CT最大'
 };
 
-const paradiselost1: GbfEnemyAttack = {
+const paradiselost: GbfEnemyAttack = {
   id: 'paradiselostonjoin',
   name: 'パラダイス・ロスト',
   description: '全体に無属性3万ダメージ',
@@ -26,7 +26,15 @@ const paradiselostCharge: GbfEnemyAttack = {
   note: '無敵か、属性変転+属性カットで通過可能'
 };
 
-const paradiselostTrigger: GbfEnemyAttack = {
+const paradiselostTrigger10: GbfEnemyAttack = {
+  id: 'paradiselosttrigger',
+  name: 'パラダイス・ロスト',
+  description: '全体にランダム属性特大ダメージ',
+  effects: ['弱体効果を全消去'],
+  note: 'カット可能'
+};
+
+const paradiselostTrigger3: GbfEnemyAttack = {
   id: 'paradiselosttrigger',
   name: 'パラダイス・ロスト',
   description: '全体にランダム属性特大ダメージ',
@@ -143,7 +151,11 @@ const axionapocalypse: GbfEnemyAttack = {
   id: 'axionapocalypse',
   name: 'アキシオン・アポカリプス',
   description: 'ランダム属性ランダム対象3回ダメージ',
-  effects: ['赫刃レベルをさらに+1']
+  effects: [
+    '赫刃レベルをさらに+1',
+    '（赫刃2以上）弱体効果1つ回復',
+    '（赫刃4以上）全体無属性1万ダメージ/全体の強化効果を全消去'
+  ]
 };
 
 const lucilius1: GbfEnemy = {
@@ -153,7 +165,7 @@ const lucilius1: GbfEnemy = {
     end: 26
   },
   triggerAttacks: [
-    { triggerHpPercentage: 100, attack: paradiselost1, condition: '参戦時' },
+    { triggerHpPercentage: 100, attack: paradiselost, condition: '参戦時' },
     { triggerHpPercentage: 95, attack: phosphorus, condition: '黙示録の喇叭を踏んでない人のみ' }
   ],
   chargeAttacks: [
@@ -205,9 +217,8 @@ const lucilius4: GbfEnemy = {
   triggerAttacks: [
     { triggerHpPercentage: 20, attack: axionapocalypse },
     { triggerHpPercentage: 15, attack: axionapocalypse },
-    { triggerHpPercentage: 10, attack: truePower },
-    { triggerHpPercentage: 10, attack: paradiselostTrigger },
-    { triggerHpPercentage: 3, attack: paradiselostTrigger }
+    { triggerHpPercentage: 10, attack: paradiselostTrigger10 },
+    { triggerHpPercentage: 3, attack: paradiselostTrigger3 }
   ],
   chargeAttacks: [{ attack: phosphorus, isOverdrive: false }, { attack: orbitalblackness, isOverdrive: true }]
 };

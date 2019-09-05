@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { jsx, css } from '@emotion/core';
 import { luciliusRaid } from './data/lucilius';
 import { EnemyTable } from './components/EnemyTable';
@@ -115,10 +115,17 @@ const navSpacerCss = css`
 
 export const App = () => {
   const [phaseIndex, setPhaseIndex] = useState<number>(0);
+  const [userNote, setUserNote] = useState<string>('');
   const [showsNote, setShowsNote] = useState<boolean>(false);
 
   const noteAreaRef = useRef<HTMLTextAreaElement>(null);
   const savedNote = sessionStorage.getItem('darkrapturetool/usernote');
+
+  useEffect(() => {
+    if (savedNote) {
+      setUserNote(savedNote);
+    }
+  }, [setUserNote]);
 
   const phase = luciliusRaid.phases[phaseIndex] || luciliusRaid.phases[0];
   const prevPhase = luciliusRaid.phases[phaseIndex - 1];
@@ -136,8 +143,9 @@ export const App = () => {
     const noteArea = noteAreaRef.current;
     if (noteArea && sessionStorage) {
       sessionStorage.setItem('darkrapturetool/usernote', noteArea.value);
+      setUserNote(noteArea.value);
     }
-  }, [noteAreaRef.current]);
+  }, [setUserNote, noteAreaRef.current]);
 
   const gotoPrevPhase = useCallback(() => {
     setPhaseIndex(phaseIndex - 1);
@@ -159,7 +167,7 @@ export const App = () => {
         <textarea
           css={noteAreaCss}
           placeholder="ここに自由にメモを書けます（ブラウザのタブを閉じると消えます）"
-          defaultValue={savedNote ? savedNote : ''}
+          defaultValue={userNote}
           onInput={onNoteInput}
           ref={noteAreaRef}
         />
