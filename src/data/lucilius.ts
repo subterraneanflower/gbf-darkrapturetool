@@ -104,10 +104,26 @@ const fig: GbfEnemyAttack = {
   debuffs: ['生命の果実（アビリティを使用時に味方全体回復/敵が大回復）[2ターン]']
 };
 
+const mars2: GbfEnemyAttack = {
+  id: 'mars2',
+  name: 'マルス',
+  description: '全体に闇ダメージ',
+  effects: ['本体の福音の黒翼を解除'],
+  debuffs: ['禁断の果実（奥義性能UP/奥義使用キャラが無属性1万ダメージを受ける）[2ターン]', '攻撃DOWN[2ターン]']
+};
+
+const fig2: GbfEnemyAttack = {
+  id: 'fig2',
+  name: 'フィークス',
+  description: '全体に闇ダメージ',
+  effects: ['本体に福音の黒翼を付与'],
+  debuffs: ['生命の果実（アビリティを使用時に味方全体回復/敵が大回復）[2ターン]', 'アンデッド[2ターン]']
+};
+
 const orbitalblackness: GbfEnemyAttack = {
   id: 'orbitalblackness',
   name: 'オービタルブラック',
-  description: 'ランダム属性ランダム対象3回ダメージ',
+  description: 'ランダム複数対象に3回ランダム属性ダメージ',
   debuffs: [
     '（試練9未達成）回復アビリティ2ターン延長',
     '（試練11未達成）強化アビリティ2ターン延長',
@@ -220,8 +236,8 @@ const darkwing2: GbfEnemy = {
   },
   triggerAttacks: [],
   chargeAttacks: [
-    { attack: mars, isOverdrive: false, condition: '初回またはフィークスと交互に発動' },
-    { attack: fig, isOverdrive: false, condition: 'マルスと交互に発動' }
+    { attack: mars2, isOverdrive: false, condition: '初回またはフィークスと交互に発動' },
+    { attack: fig2, isOverdrive: false, condition: 'マルスと交互に発動' }
   ]
 };
 
