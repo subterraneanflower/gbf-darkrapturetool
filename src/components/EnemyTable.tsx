@@ -50,6 +50,7 @@ const attackCss = css`
 const attackNameCss = css`
   background-color: var(--attack-color);
   color: white;
+  font-weight: bold;
   text-align: center;
   padding: 0.5em 0;
 `;
@@ -76,6 +77,15 @@ const attackConditionCss = css`
   color: red;
 `;
 
+const effectListCss = css`
+  font-weight: bold;
+  margin: 0.5em 0;
+
+  & li {
+    margin-left: 2em;
+  }
+`;
+
 const buffListCss = css`
   color: var(--buff-color);
 
@@ -92,12 +102,13 @@ const debuffListCss = css`
   }
 `;
 
-const buffCss = css`
-  background-color: ;
+const noteCss = css`
+  color: gray;
 `;
 
 export const EnemyTable: React.FC<EnemyTableProps> = React.memo(({ enemyData, ...props }) => {
   const chargeAttacks = enemyData.chargeAttacks.map((cAtk) => {
+    const effectListItem = cAtk.attack.effects ? cAtk.attack.effects.map((effect) => <li>{effect}</li>) : null;
     const buffListItem = cAtk.attack.buffs ? cAtk.attack.buffs.map((buff) => <li>{buff}</li>) : null;
     const debuffListItem = cAtk.attack.debuffs ? cAtk.attack.debuffs.map((debuff) => <li>{debuff}</li>) : null;
 
@@ -109,17 +120,17 @@ export const EnemyTable: React.FC<EnemyTableProps> = React.memo(({ enemyData, ..
         </div>
         <div css={attackDetailsCss}>
           {cAtk.condition ? <div css={attackConditionCss}>条件:{cAtk.condition}</div> : null}
-          <div>{cAtk.attack.description}</div>
-          {cAtk.attack.effects ? <div>{cAtk.attack.effects.join('\n')}</div> : null}
+          <ul css={effectListCss}>{cAtk.attack.description}{effectListItem}</ul>
           {buffListItem ? <ul css={buffListCss}>強化効果{buffListItem}</ul> : null}
           {debuffListItem ? <ul css={debuffListCss}>弱体効果{debuffListItem}</ul> : null}
-          {cAtk.attack.note ? <div>メモ: {cAtk.attack.note}</div> : null}
+          {cAtk.attack.note ? <div css={noteCss}>メモ: {cAtk.attack.note}</div> : null}
         </div>
       </div>
     );
   });
 
   const triggerAttacks = enemyData.triggerAttacks.map((tAtk) => {
+    const effectListItem = tAtk.attack.effects ? tAtk.attack.effects.map((effect) => <li>{effect}</li>) : null;
     const buffListItem = tAtk.attack.buffs ? tAtk.attack.buffs.map((buff) => <li>{buff}</li>) : null;
     const debuffListItem = tAtk.attack.debuffs ? tAtk.attack.debuffs.map((debuff) => <li>{debuff}</li>) : null;
 
@@ -130,11 +141,10 @@ export const EnemyTable: React.FC<EnemyTableProps> = React.memo(({ enemyData, ..
         </div>
         <div css={attackDetailsCss}>
           {tAtk.condition ? <div css={attackConditionCss}>条件:{tAtk.condition}</div> : null}
-          <div>{tAtk.attack.description}</div>
-          {tAtk.attack.effects ? <div>{tAtk.attack.effects.join('\n')}</div> : null}
+          <ul css={effectListCss}>{tAtk.attack.description}{effectListItem}</ul>
           {buffListItem ? <ul css={buffListCss}>強化効果{buffListItem}</ul> : null}
           {debuffListItem ? <ul css={debuffListCss}>弱体効果{debuffListItem}</ul> : null}
-          {tAtk.attack.note ? <div>メモ: {tAtk.attack.note}</div> : null}
+          {tAtk.attack.note ? <div css={noteCss}>メモ: {tAtk.attack.note}</div> : null}
         </div>
       </div>
     );

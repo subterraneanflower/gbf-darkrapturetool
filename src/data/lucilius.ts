@@ -1,5 +1,11 @@
 import { GbfEnemyAttack, GbfEnemy, GbfRaid, GbfRaidPhase } from './gbf_enemy_data';
 
+const truePower: GbfEnemyAttack = {
+  id: 'truepower',
+  name: '真の力解放',
+  description: '弱体効果を全消去'
+};
+
 const ctMax: GbfEnemyAttack = {
   id: 'ctmax',
   name: 'CT MAX',
@@ -37,7 +43,7 @@ const phosphorus: GbfEnemyAttack = {
 
 const iblis: GbfEnemyAttack = {
   id: 'iblis',
-  name: 'イヴリース',
+  name: 'イブリース',
   description: 'ランダム複数対象に多段ランダム属性ダメージ',
   debuffs: ['恐怖[1-3ターン]', '裂傷[1-3ターン]', '衰弱[1-3ターン]']
 };
@@ -61,22 +67,25 @@ const atheism: GbfEnemyAttack = {
   id: 'atheism',
   name: '無神論',
   description: 'ルシファー本体に絶対否定と永遠拒絶を付与',
-  buffs: ['絶対否定', '永遠拒絶']
+  buffs: [
+    '絶対否定（指定属性以外を50%カット/1ターンに1000万ダメージで解除）',
+    '永遠拒絶（指定属性以外からの弱体耐性アップ/弱体6個以上で解除）'
+  ]
 };
 
 const sephiroth: GbfEnemyAttack = {
   id: 'sephiroth',
   name: 'セフィロト',
   description: 'ダメージなし',
-  effects: ['羽の弱体効果を全解除']
+  effects: ['羽根の弱体効果を全解除', '終末へのカウントダウン開始']
 };
 
 const seventrumpet: GbfEnemyAttack = {
   id: 'seventrumpet',
   name: '黙示録の喇叭',
   description: 'ダメージなし',
-  effects: ['十二の試練開始'],
-  debuffs: ['全体の強化効果を全消去']
+  effects: ['十二の試練開始', '本体と羽根の弱体効果を全消去', '踏んだ人は本体の95%, 85%, 60%が発動しなくなる'],
+  debuffs: ['味方全体の強化効果を全消去']
 };
 
 const mars: GbfEnemyAttack = {
@@ -84,7 +93,7 @@ const mars: GbfEnemyAttack = {
   name: 'マルス',
   description: '全体に闇ダメージ',
   effects: ['本体の福音の黒翼を解除'],
-  debuffs: ['禁断の果実（奥義性能UP/奥義使用キャラが無属性1万ダメージを受ける）[3ターン]']
+  debuffs: ['禁断の果実（奥義性能UP/奥義使用キャラが無属性1万ダメージを受ける）[2ターン]']
 };
 
 const fig: GbfEnemyAttack = {
@@ -92,10 +101,10 @@ const fig: GbfEnemyAttack = {
   name: 'フィークス',
   description: '全体に闇ダメージ',
   effects: ['本体に福音の黒翼を付与'],
-  debuffs: ['生命の果実（アビリティを使用時に味方全体回復/敵が大回復）[3ターン]']
+  debuffs: ['生命の果実（アビリティを使用時に味方全体回復/敵が大回復）[2ターン]']
 };
 
-const orbitalblackness = {
+const orbitalblackness: GbfEnemyAttack = {
   id: 'orbitalblackness',
   name: 'オービタルブラック',
   description: 'ランダム属性ランダム対象3回ダメージ',
@@ -106,13 +115,15 @@ const orbitalblackness = {
   ]
 };
 
-const gopherwoodark = {
+const gopherwoodark: GbfEnemyAttack = {
   id: 'gopherwoodark',
   name: 'ゴフェル・アーク',
-  description: '種族被り時に、配置が後ろの被りキャラが即死'
+  description: '種族被り時に、配置が後ろの被りキャラが死亡',
+  effects: ['フィールド効果: 天の水門（ターンが2-3ずつ進む）'],
+  debuffs: ['復活不可', '召喚不可']
 };
 
-const axionapocalypse = {
+const axionapocalypse: GbfEnemyAttack = {
   id: 'axionapocalypse',
   name: 'アキシオン・アポカリプス',
   description: 'ランダム属性ランダム対象3回ダメージ',
@@ -127,10 +138,7 @@ const lucilius1: GbfEnemy = {
   },
   triggerAttacks: [
     { triggerHpPercentage: 100, attack: paradiselost1, condition: '参戦時' },
-    { triggerHpPercentage: 95, attack: phosphorus },
-    { triggerHpPercentage: 85, attack: axion },
-    { triggerHpPercentage: 70, attack: ctMax },
-    { triggerHpPercentage: 75, attack: atheism, condition: '羽生存時のみ' }
+    { triggerHpPercentage: 95, attack: phosphorus, condition: '黙示録の喇叭を踏んでない人のみ' }
   ],
   chargeAttacks: [
     { attack: phosphorus, isOverdrive: false },
@@ -146,15 +154,12 @@ const lucilius2: GbfEnemy = {
     end: 26
   },
   triggerAttacks: [
-    { triggerHpPercentage: 95, attack: phosphorus },
-    { triggerHpPercentage: 85, attack: axion },
-    { triggerHpPercentage: 70, attack: ctMax },
-    { triggerHpPercentage: 60, attack: axion60 },
-    { triggerHpPercentage: 55, attack: ctMax }
+    { triggerHpPercentage: 95, attack: phosphorus, condition: '黙示録の喇叭を踏んでない人のみ' },
+    { triggerHpPercentage: 85, attack: axion, condition: '黙示録の喇叭を踏んでない人のみ' },
+    { triggerHpPercentage: 75, attack: atheism, condition: '羽根生存の時のみ' }
   ],
   chargeAttacks: [
-    { attack: phosphorus, isOverdrive: false },
-    { attack: iblis, isOverdrive: true },
+    { attack: axionapocalypse, isOverdrive: false },
     { attack: paradiselostCharge, isOverdrive: true, condition: '羽と同時にCT最大時に発動' }
   ]
 };
@@ -166,9 +171,9 @@ const lucilius3: GbfEnemy = {
     end: 25
   },
   triggerAttacks: [
-    { triggerHpPercentage: 85, attack: axion },
+    { triggerHpPercentage: 85, attack: axion, condition: '黙示録の喇叭を踏んでない人のみ' },
     { triggerHpPercentage: 70, attack: ctMax },
-    { triggerHpPercentage: 60, attack: axion60 },
+    { triggerHpPercentage: 60, attack: axion60, condition: '黙示録の喇叭を踏んでない人のみ' },
     { triggerHpPercentage: 55, attack: ctMax },
     { triggerHpPercentage: 25, attack: gopherwoodark }
   ],
@@ -184,6 +189,7 @@ const lucilius4: GbfEnemy = {
   triggerAttacks: [
     { triggerHpPercentage: 20, attack: axionapocalypse },
     { triggerHpPercentage: 15, attack: axionapocalypse },
+    { triggerHpPercentage: 10, attack: truePower },
     { triggerHpPercentage: 10, attack: paradiselostTrigger },
     { triggerHpPercentage: 3, attack: paradiselostTrigger }
   ],
@@ -191,10 +197,10 @@ const lucilius4: GbfEnemy = {
 };
 
 const darkwing1: GbfEnemy = {
-  name: '黒き羽',
+  name: '黒き羽根',
   hpPercentageRange: {
     begin: 100,
-    end: 51
+    end: 50
   },
   triggerAttacks: [
     { triggerHpPercentage: 70, attack: sephiroth, condition: '最初に踏んだ人のみ' },
@@ -207,9 +213,9 @@ const darkwing1: GbfEnemy = {
 };
 
 const darkwing2: GbfEnemy = {
-  name: '黒き羽',
+  name: '黒き羽根',
   hpPercentageRange: {
-    begin: 50,
+    begin: 49,
     end: 0
   },
   triggerAttacks: [],
@@ -221,19 +227,19 @@ const darkwing2: GbfEnemy = {
 
 // 開幕〜羽50%
 const phase1: GbfRaidPhase = {
-  name: '開始〜羽50%まで',
+  name: '開始〜試練開始まで',
   enemies: [lucilius1, darkwing1]
 };
 
 // 試練開始
 const phase2: GbfRaidPhase = {
-  name: '試練開始〜羽撃破まで',
+  name: '試練開始〜羽根撃破まで',
   enemies: [lucilius2, darkwing2]
 };
 
 // 羽撃破
 const phase3: GbfRaidPhase = {
-  name: '羽撃破〜ゴフェルアーク',
+  name: '羽根撃破〜ゴフェルアーク',
   enemies: [lucilius3]
 };
 

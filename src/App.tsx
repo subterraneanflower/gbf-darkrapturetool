@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { jsx, css } from '@emotion/core';
 import { luciliusRaid } from './data/lucilius';
 import { EnemyTable } from './components/EnemyTable';
@@ -12,17 +12,54 @@ const appCss = css`
   font-size: 0.7em;
 `;
 
-const phaseNameCss = css`
+const headerCss = css`
+  position: relative;
   color: white;
-  font-size: 2em;
   text-align: center;
-  padding: 1em 0;
+  margin-top: 1em;
+  height: 3em;
 `;
 
-const phaseNameInnerCss = css`
-  background-color: var(--brand-color);
-  padding: 0.5em 2em;
+const phaseNameCss = css`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  border: 1px solid var(--brand-color);
   border-radius: 3px;
+  font-size: 1em;
+  padding: 0.5em 2em;
+  width: max-content;
+`;
+
+const noteButtonCss = css`
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+
+  position: absolute;
+  right: 2rem;
+  top: 0;
+  display: block;
+  background-color: var(--brand-color);
+  border: none;
+  border-radius: 3px;
+  color: white;
+  font-size: 1em;
+  padding: 0.5em 1em;
+  max-width: 40%;
+  cursor: pointer;
+  user-select: none;
+`;
+
+const noteAreaCss = css`
+  display: block;
+  height: 8em;
+  padding: 1em;
+  margin: 1em 3em;
+  resize: vertical;
 `;
 
 const enemyInfoCss = css`
@@ -63,11 +100,13 @@ const navButtonCss = css`
   display: block;
   background-color: white;
   border: none;
+  border-radius: 3px;
   color: var(--brand-color);
   font-size: 1.2em;
   padding: 0.5em 0;
   max-width: 40%;
   cursor: pointer;
+  user-select: none;
 `;
 
 const navSpacerCss = css`
@@ -76,6 +115,11 @@ const navSpacerCss = css`
 
 export const App = () => {
   const [phaseIndex, setPhaseIndex] = useState<number>(0);
+  const [showsNote, setShowsNote] = useState<boolean>(false);
+
+  const noteAreaRef = useRef<HTMLTextAreaElement>(null);
+  const savedNote = sessionStorage.getItem('darkrapturetool/usernote');
+
   const phase = luciliusRaid.phases[phaseIndex] || luciliusRaid.phases[0];
   const prevPhase = luciliusRaid.phases[phaseIndex - 1];
   const nextPhase = luciliusRaid.phases[phaseIndex + 1];
@@ -83,6 +127,17 @@ export const App = () => {
   const enemyTables = phase.enemies.map((enemy, index) => (
     <EnemyTable key={`enemy-${index}-${phase.name}-${enemy.name}`} enemyData={enemy} css={enemyTableCss} />
   ));
+
+  const toggleShowsNote = useCallback(() => {
+    setShowsNote(!showsNote);
+  }, [showsNote, setShowsNote]);
+
+  const onNoteInput = useCallback(() => {
+    const noteArea = noteAreaRef.current;
+    if (noteArea && sessionStorage) {
+      sessionStorage.setItem('darkrapturetool/usernote', noteArea.value);
+    }
+  }, [noteAreaRef.current]);
 
   const gotoPrevPhase = useCallback(() => {
     setPhaseIndex(phaseIndex - 1);
@@ -94,9 +149,21 @@ export const App = () => {
 
   return (
     <div css={appCss}>
-      <div css={phaseNameCss}>
-        <span css={phaseNameInnerCss}>{phase.name}</span>
+      <div css={headerCss}>
+        <span css={phaseNameCss}>{phase.name}</span>
+        <button css={noteButtonCss} onClick={toggleShowsNote}>
+          メモ欄
+        </button>
       </div>
+      {showsNote ? (
+        <textarea
+          css={noteAreaCss}
+          placeholder="ここに自由にメモを書けます（ブラウザのタブを閉じると消えます）"
+          defaultValue={savedNote ? savedNote : ''}
+          onInput={onNoteInput}
+          ref={noteAreaRef}
+        />
+      ) : null}
       <div css={enemyInfoCss}>{enemyTables}</div>
       <div css={navbarCss}>
         {prevPhase ? (
