@@ -143,7 +143,7 @@ const gopherwoodark: GbfEnemyAttack = {
   id: 'gopherwoodark',
   name: 'ゴフェル・アーク',
   description: '種族被り時に、配置が後ろの被りキャラが死亡',
-  effects: ['フィールド効果: 天の水門（ターンが2-3ずつ進む）'],
+  effects: ['フィールド効果: 天の水門（ターンが2-3ずつ進む）', '（最初の1人のみ）弱体効果を全消去'],
   debuffs: ['復活不可', '召喚不可']
 };
 
