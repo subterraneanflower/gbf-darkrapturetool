@@ -85,14 +85,14 @@ const sephiroth: GbfEnemyAttack = {
   id: 'sephiroth',
   name: 'セフィロト',
   description: 'ダメージなし',
-  effects: ['羽根の弱体効果を全解除', '終末へのカウントダウン開始']
+  effects: ['羽の弱体効果を全解除', '終末へのカウントダウン開始']
 };
 
 const seventrumpet: GbfEnemyAttack = {
   id: 'seventrumpet',
   name: '黙示録の喇叭',
   description: 'ダメージなし',
-  effects: ['十二の試練開始', '本体と羽根の弱体効果を全消去', '踏んだ人は本体の95%, 85%, 60%が発動しなくなる'],
+  effects: ['十二の試練開始', '本体と羽の弱体効果を全消去', '踏んだ人は本体の95%, 85%, 60%が発動しなくなる'],
   debuffs: ['味方全体の強化効果を全消去']
 };
 
@@ -184,7 +184,7 @@ const lucilius2: GbfEnemy = {
   triggerAttacks: [
     { triggerHpPercentage: 95, attack: phosphorus, condition: '黙示録の喇叭を踏んでない人のみ' },
     { triggerHpPercentage: 85, attack: axion, condition: '黙示録の喇叭を踏んでない人のみ' },
-    { triggerHpPercentage: 75, attack: atheism, condition: '羽根生存の時のみ' }
+    { triggerHpPercentage: 75, attack: atheism, condition: '羽生存の時のみ' }
   ],
   chargeAttacks: [
     { attack: axionapocalypse, isOverdrive: false },
@@ -224,7 +224,7 @@ const lucilius4: GbfEnemy = {
 };
 
 const darkwing1: GbfEnemy = {
-  name: '黒き羽根',
+  name: '黒き羽',
   hpPercentageRange: {
     begin: 100,
     end: 50
@@ -240,7 +240,7 @@ const darkwing1: GbfEnemy = {
 };
 
 const darkwing2: GbfEnemy = {
-  name: '黒き羽根',
+  name: '黒き羽',
   hpPercentageRange: {
     begin: 49,
     end: 0
@@ -260,13 +260,13 @@ const phase1: GbfRaidPhase = {
 
 // 試練開始
 const phase2: GbfRaidPhase = {
-  name: '試練開始〜羽根撃破まで',
+  name: '試練開始〜羽撃破まで',
   enemies: [lucilius2, darkwing2]
 };
 
 // 羽撃破
 const phase3: GbfRaidPhase = {
-  name: '羽根撃破〜ゴフェルアーク',
+  name: '羽撃破〜ゴフェルアーク',
   enemies: [lucilius3]
 };
 
