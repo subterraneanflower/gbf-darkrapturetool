@@ -2,6 +2,8 @@ export interface GbfEnemyAttack {
   id: string;
   name: string;
   description: string;
+  simpleDescription: string;
+  simplePlan: string;
   effects?: string[];
   buffs?: string[];
   debuffs?: string[];

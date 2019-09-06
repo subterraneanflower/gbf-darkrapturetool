@@ -4,6 +4,7 @@ import { GbfEnemy } from '../data/gbf_enemy_data';
 
 export interface EnemyTableProps {
   enemyData: GbfEnemy;
+  mode: string;
 }
 
 const enemyNameCss = css`
@@ -106,27 +107,50 @@ const noteCss = css`
   color: gray;
 `;
 
+const simpleDescriptionCss = css`
+  font-weight: bold;
+`;
+
 export const EnemyTable: React.FC<EnemyTableProps> = React.memo(({ enemyData, ...props }) => {
   const chargeAttacks = enemyData.chargeAttacks.map((cAtk) => {
     const effectListItem = cAtk.attack.effects ? cAtk.attack.effects.map((effect) => <li>{effect}</li>) : null;
     const buffListItem = cAtk.attack.buffs ? cAtk.attack.buffs.map((buff) => <li>{buff}</li>) : null;
     const debuffListItem = cAtk.attack.debuffs ? cAtk.attack.debuffs.map((debuff) => <li>{debuff}</li>) : null;
 
-    return (
-      <div key={`charge-attack-${cAtk.attack.id}`} css={attackCss}>
-        <div css={attackNameCss}>
-          {cAtk.isOverdrive ? <span css={overdriveCss}>OVERDRIVE</span> : null}
-          {cAtk.attack.name}
+    if (props.mode === 'simple') {
+      return (
+        <div key={`charge-attack-${cAtk.attack.id}`} css={attackCss}>
+          <div css={attackNameCss}>
+            {cAtk.isOverdrive ? <span css={overdriveCss}>OVERDRIVE</span> : null}
+            {cAtk.attack.name}
+          </div>
+          <div css={attackDetailsCss}>
+            {cAtk.condition ? <div css={attackConditionCss}>条件:{cAtk.condition}</div> : null}
+            <div css={simpleDescriptionCss}>{cAtk.attack.simpleDescription}</div>
+            <div>対策:{cAtk.attack.simplePlan}</div>
+          </div>
         </div>
-        <div css={attackDetailsCss}>
-          {cAtk.condition ? <div css={attackConditionCss}>条件:{cAtk.condition}</div> : null}
-          <ul css={effectListCss}>{cAtk.attack.description}{effectListItem}</ul>
-          {buffListItem ? <ul css={buffListCss}>強化効果{buffListItem}</ul> : null}
-          {debuffListItem ? <ul css={debuffListCss}>弱体効果{debuffListItem}</ul> : null}
-          {cAtk.attack.note ? <div css={noteCss}>メモ: {cAtk.attack.note}</div> : null}
+      );
+    } else {
+      return (
+        <div key={`charge-attack-${cAtk.attack.id}`} css={attackCss}>
+          <div css={attackNameCss}>
+            {cAtk.isOverdrive ? <span css={overdriveCss}>OVERDRIVE</span> : null}
+            {cAtk.attack.name}
+          </div>
+          <div css={attackDetailsCss}>
+            {cAtk.condition ? <div css={attackConditionCss}>条件:{cAtk.condition}</div> : null}
+            <ul css={effectListCss}>
+              {cAtk.attack.description}
+              {effectListItem}
+            </ul>
+            {buffListItem ? <ul css={buffListCss}>強化効果{buffListItem}</ul> : null}
+            {debuffListItem ? <ul css={debuffListCss}>弱体効果{debuffListItem}</ul> : null}
+            {cAtk.attack.note ? <div css={noteCss}>メモ: {cAtk.attack.note}</div> : null}
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   });
 
   const triggerAttacks = enemyData.triggerAttacks.map((tAtk) => {
@@ -134,20 +158,38 @@ export const EnemyTable: React.FC<EnemyTableProps> = React.memo(({ enemyData, ..
     const buffListItem = tAtk.attack.buffs ? tAtk.attack.buffs.map((buff) => <li>{buff}</li>) : null;
     const debuffListItem = tAtk.attack.debuffs ? tAtk.attack.debuffs.map((debuff) => <li>{debuff}</li>) : null;
 
-    return (
-      <div key={`trigger-attack-${tAtk.attack.id}`} css={attackCss}>
-        <div css={attackNameCss}>
-          [{tAtk.triggerHpPercentage}%]{tAtk.attack.name}
+    if (props.mode === 'simple') {
+      return (
+        <div key={`charge-attack-${tAtk.attack.id}`} css={attackCss}>
+          <div css={attackNameCss}>
+            [{tAtk.triggerHpPercentage}%]{tAtk.attack.name}
+          </div>
+          <div css={attackDetailsCss}>
+            {tAtk.condition ? <div css={attackConditionCss}>条件:{tAtk.condition}</div> : null}
+            <div css={simpleDescriptionCss}>{tAtk.attack.simpleDescription}</div>
+            <div>対策:{tAtk.attack.simplePlan}</div>
+          </div>
         </div>
-        <div css={attackDetailsCss}>
-          {tAtk.condition ? <div css={attackConditionCss}>条件:{tAtk.condition}</div> : null}
-          <ul css={effectListCss}>{tAtk.attack.description}{effectListItem}</ul>
-          {buffListItem ? <ul css={buffListCss}>強化効果{buffListItem}</ul> : null}
-          {debuffListItem ? <ul css={debuffListCss}>弱体効果{debuffListItem}</ul> : null}
-          {tAtk.attack.note ? <div css={noteCss}>メモ: {tAtk.attack.note}</div> : null}
+      );
+    } else {
+      return (
+        <div key={`trigger-attack-${tAtk.attack.id}`} css={attackCss}>
+          <div css={attackNameCss}>
+            [{tAtk.triggerHpPercentage}%]{tAtk.attack.name}
+          </div>
+          <div css={attackDetailsCss}>
+            {tAtk.condition ? <div css={attackConditionCss}>条件:{tAtk.condition}</div> : null}
+            <ul css={effectListCss}>
+              {tAtk.attack.description}
+              {effectListItem}
+            </ul>
+            {buffListItem ? <ul css={buffListCss}>強化効果{buffListItem}</ul> : null}
+            {debuffListItem ? <ul css={debuffListCss}>弱体効果{debuffListItem}</ul> : null}
+            {tAtk.attack.note ? <div css={noteCss}>メモ: {tAtk.attack.note}</div> : null}
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   });
 
   return (

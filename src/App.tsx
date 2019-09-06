@@ -33,6 +33,27 @@ const phaseNameCss = css`
   width: max-content;
 `;
 
+const modeButtonCss = css`
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+
+  position: absolute;
+  left: 2rem;
+  top: 0;
+  display: block;
+  background-color: var(--brand-color);
+  border: none;
+  border-radius: 3px;
+  color: white;
+  font-size: 1em;
+  padding: 0.5em 1em;
+  max-width: 40%;
+  cursor: pointer;
+  user-select: none;
+`;
+
 const noteButtonCss = css`
   appearance: none;
   -webkit-appearance: none;
@@ -115,24 +136,35 @@ const navSpacerCss = css`
 
 export const App = () => {
   const [phaseIndex, setPhaseIndex] = useState<number>(0);
+  const [mode, setMode] = useState<string>('advanced');
   const [userNote, setUserNote] = useState<string>('');
   const [showsNote, setShowsNote] = useState<boolean>(false);
 
   const noteAreaRef = useRef<HTMLTextAreaElement>(null);
   const savedNote = sessionStorage.getItem('darkrapturetool/usernote');
+  const savedMode = localStorage.getItem('darkrapturetool/mode');
 
   useEffect(() => {
+    if (savedMode) {
+      setMode(savedMode);
+    }
+
     if (savedNote) {
       setUserNote(savedNote);
     }
-  }, [setUserNote]);
+  }, [setMode, setUserNote]);
 
   const phase = luciliusRaid.phases[phaseIndex] || luciliusRaid.phases[0];
   const prevPhase = luciliusRaid.phases[phaseIndex - 1];
   const nextPhase = luciliusRaid.phases[phaseIndex + 1];
 
   const enemyTables = phase.enemies.map((enemy, index) => (
-    <EnemyTable key={`enemy-${index}-${phase.name}-${enemy.name}`} enemyData={enemy} css={enemyTableCss} />
+    <EnemyTable
+      key={`enemy-${mode}-${index}-${phase.name}-${enemy.name}`}
+      enemyData={enemy}
+      css={enemyTableCss}
+      mode={mode}
+    />
   ));
 
   const toggleShowsNote = useCallback(() => {
@@ -147,6 +179,14 @@ export const App = () => {
     }
   }, [setUserNote, noteAreaRef.current]);
 
+  const toggleMode = useCallback(() => {
+    const nextMode = mode === 'simple' ? 'advanced' : 'simple';
+    setMode(nextMode);
+    if (localStorage) {
+      localStorage.setItem('darkrapturetool/mode', nextMode);
+    }
+  }, [mode, setMode]);
+
   const gotoPrevPhase = useCallback(() => {
     setPhaseIndex(phaseIndex - 1);
   }, [phaseIndex, setPhaseIndex]);
@@ -158,6 +198,9 @@ export const App = () => {
   return (
     <div css={appCss}>
       <div css={headerCss}>
+        <button css={modeButtonCss} onClick={toggleMode}>
+          {mode === 'simple' ? '詳細にする' : '簡易にする'}
+        </button>
         <span css={phaseNameCss}>{phase.name}</span>
         <button css={noteButtonCss} onClick={toggleShowsNote}>
           メモ欄
