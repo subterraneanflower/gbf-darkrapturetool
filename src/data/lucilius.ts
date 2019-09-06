@@ -146,9 +146,8 @@ const mars2: GbfEnemyAttack = {
   id: 'mars2',
   name: 'マルス',
   description: '全体に闇ダメージ',
-  simpleDescription: '全体ダメージ。本体の羽を解除。奥義リンゴ付与',
+  simpleDescription: '全体ダメージ。奥義リンゴ付与',
   simplePlan: 'ファラだけでOK',
-  effects: ['本体の福音の黒翼を解除'],
   debuffs: ['禁断の果実（奥義性能UP/奥義使用キャラが無属性1万ダメージを受ける）[2ターン]', '攻撃DOWN[2ターン]']
 };
 
@@ -156,9 +155,8 @@ const fig2: GbfEnemyAttack = {
   id: 'fig2',
   name: 'フィークス',
   description: '全体に闇ダメージ',
-  simpleDescription: '全体ダメージ。本体に羽付与。回復リンゴ付与',
+  simpleDescription: '全体ダメージ。回復リンゴ付与',
   simplePlan: 'ファラだけでOK',
-  effects: ['本体に福音の黒翼を付与'],
   debuffs: ['生命の果実（アビリティを使用時に味方全体回復/敵が大回復）[2ターン]', 'アンデッド[2ターン]']
 };
 
