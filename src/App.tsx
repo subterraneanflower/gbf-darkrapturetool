@@ -136,7 +136,7 @@ const navSpacerCss = css`
 
 export const App = () => {
   const [phaseIndex, setPhaseIndex] = useState<number>(0);
-  const [mode, setMode] = useState<string>('advanced');
+  const [mode, setMode] = useState<string>('simple');
   const [userNote, setUserNote] = useState<string>('');
   const [showsNote, setShowsNote] = useState<boolean>(false);
 
